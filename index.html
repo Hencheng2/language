@@ -1,184 +1,301 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Language Translation and Pronunciation Tool</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        h1 {
-            text-align: center;
-            color: #ffffff;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            color: #bbbbbb;
-        }
-        select, textarea, button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            background-color: #1e1e1e;
-            color: #e0e0e0;
-            border: 1px solid #333333;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        textarea {
-            height: 100px;
-            resize: vertical;
-        }
-        button {
-            background-color: #333333;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #444444;
-        }
-        #output {
-            margin-top: 20px;
-        }
-        #translatedText, #pronunciationText {
-            background-color: #1e1e1e;
-            padding: 10px;
-            border: 1px solid #333333;
-            border-radius: 4px;
-            white-space: pre-wrap;
-            margin-top: 10px;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Multilang Translator — Standalone</title>
+  <style>
+    :root{--bg:#0b0f14;--panel:#0f1720;--muted:#94a3b8;--accent:#7c3aed;--success:#16a34a;--danger:#ef4444;--glass: rgba(255,255,255,0.03)}
+    *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{margin:0;background:linear-gradient(180deg,#071017 0%, #0b0f14 100%);color:#e6eef6;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:28px}
+    .card{width:980px;max-width:96vw;background:var(--panel);border-radius:12px;padding:20px;box-shadow:0 8px 30px rgba(2,6,23,0.7);border:1px solid rgba(255,255,255,0.03)}
+    h1{margin:0 0 6px;font-size:20px}
+    p.lead{margin:0 0 12px;color:var(--muted);font-size:13px}
+    .grid{display:grid;gap:12px}
+    .row{display:flex;gap:12px}
+    textarea{width:100%;min-height:110px;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));color:inherit;resize:vertical}
+    select,input[type=checkbox]{background:transparent;color:inherit;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03)}
+    button{background:var(--accent);border:none;color:white;padding:8px 12px;border-radius:8px;cursor:pointer}
+    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
+    .panel{background:var(--glass);padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.03)}
+    .muted{color:var(--muted)}
+    .small{font-size:13px}
+    .flex{display:flex;align-items:center;gap:8px}
+    .space{flex:1}
+    .chip{background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.02);font-size:13px}
+    .out{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);min-height:48px}
+    footer{margin-top:8px;color:var(--muted);font-size:12px}
+    .controls{display:flex;gap:8px;align-items:center}
+    .toggle{display:flex;align-items:center;gap:6px}
+    .kbd{background:rgba(0,0,0,0.3);padding:6px;border-radius:6px;font-size:12px}
+    a.inline{color:var(--accent);text-decoration:none}
+  </style>
 </head>
 <body>
-    <h1>Language Translation and Pronunciation Tool</h1>
-    
-    <label for="sourceLang">Source Language (select 'Auto' for detection):</label>
-    <select id="sourceLang">
-        <option value="auto">Auto Detect</option>
-        <option value="en">English</option>
-        <option value="sw">Kiswahili (Swahili)</option>
-        <option value="es">Spanish</option>
-        <option value="fr">French</option>
-        <option value="de">German</option>
-        <option value="it">Italian</option>
-        <option value="pt">Portuguese</option>
-        <option value="ru">Russian</option>
-        <option value="zh">Chinese (Mandarin)</option>
-        <option value="ja">Japanese</option>
-    </select>
-    
-    <label for="targetLang">Target Language:</label>
-    <select id="targetLang">
-        <option value="en">English</option>
-        <option value="sw">Kiswahili (Swahili)</option>
-        <option value="es">Spanish</option>
-        <option value="fr">French</option>
-        <option value="de">German</option>
-        <option value="it">Italian</option>
-        <option value="pt">Portuguese</option>
-        <option value="ru">Russian</option>
-        <option value="zh">Chinese (Mandarin)</option>
-        <option value="ja">Japanese</option>
-    </select>
-    
-    <label for="inputText">Input Text:</label>
-    <textarea id="inputText" placeholder="Enter your sentence here..."></textarea>
-    
-    <button id="translateBtn">Translate</button>
-    
-    <div id="output">
-        <label>Translated Text:</label>
-        <div id="translatedText"></div>
-        
-        <label>Pronunciation:</label>
-        <div id="pronunciationText"></div>
-        
-        <div id="pronunciationSection">
-            <button id="pronounceBtn" disabled>Pronounce Translated Text</button>
+  <div class="card">
+    <h1>Multilang Translator — Standalone</h1>
+    <p class="lead">Type text, choose a target language, and get translation + pronunciation. Includes IPA lookup (where available) and an expanded offline dictionary fallback. Dark theme, no frameworks.</p>
+
+    <div class="grid">
+      <div class="panel">
+        <label class="small muted">Input (main: English / Kiswahili supported)</label>
+        <textarea id="input" placeholder="Type a word or sentence... e.g. girl"></textarea>
+        <div class="row" style="margin-top:8px;align-items:center">
+          <div class="controls">
+            <label class="small muted">Target</label>
+            <select id="target" style="margin-left:6px">
+              <option value="en">English (en)</option>
+              <option value="sw">Kiswahili (sw)</option>
+              <option value="es">Spanish (es)</option>
+              <option value="fr">French (fr)</option>
+              <option value="de">German (de)</option>
+              <option value="it">Italian (it)</option>
+              <option value="pt">Portuguese (pt)</option>
+              <option value="ru">Russian (ru)</option>
+              <option value="zh">Chinese (zh)</option>
+              <option value="ja">Japanese (ja)</option>
+              <option value="ar">Arabic (ar)</option>
+            </select>
+
+            <div style="width:8px"></div>
+            <button id="translate">Translate</button>
+            <button id="clear" class="ghost">Clear</button>
+
+            <div class="space"></div>
+
+            <div class="toggle small" title="Auto-detect and translate while typing">
+              <input type="checkbox" id="autodetect" />
+              <label for="autodetect" class="muted">Auto-detect & translate on type</label>
+            </div>
+
+            <div class="toggle small" style="margin-left:12px" title="Auto-play pronunciation after translation">
+              <input type="checkbox" id="autoplay" />
+              <label for="autoplay" class="muted">Auto-play TTS</label>
+            </div>
+
+          </div>
         </div>
+      </div>
+
+      <div class="row">
+        <div style="flex:1">
+          <label class="small muted">Detected source</label>
+          <div class="out" id="detected">—</div>
+        </div>
+        <div style="flex:1">
+          <label class="small muted">Translated text</label>
+          <div class="out" id="translated">—</div>
+        </div>
+        <div style="flex:1">
+          <label class="small muted">IPA / Phonetics</label>
+          <div class="out" id="ipa">—</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div style="flex:1" class="panel">
+          <div class="flex"><strong class="small">Actions</strong><div class="space"></div><span class="muted small">Play uses browser TTS</span></div>
+          <div style="margin-top:8px" class="row">
+            <button id="play">Play Pronunciation</button>
+            <button id="copy" class="ghost">Copy Translation</button>
+            <button id="ipa-copy" class="ghost">Copy IPA</button>
+            <div style="flex:1"></div>
+            <div class="chip" id="status">Ready</div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        IPA lookup uses <a class="inline" href="https://dictionaryapi.dev" target="_blank">dictionaryapi.dev</a> (free) where available — that API supports many languages. Translation + detection uses the libretranslate endpoints. For production replace any public endpoints with reliable/paid services and your API keys.
+      </footer>
     </div>
+  </div>
 
-    <script>
-        // Mock translation and pronunciation data (replace with real API in production)
-        const mockTranslations = {
-            en: { girl: { text: "girl", pronunciation: "gurl" } },
-            sw: { girl: { text: "msichana", pronunciation: "m-see-chah-nah" } },
-            es: { girl: { text: "chica", pronunciation: "chee-kah" } },
-            fr: { girl: { text: "fille", pronunciation: "fee-yuh" } },
-            de: { girl: { text: "Mädchen", pronunciation: "maid-chen" } },
-            it: { girl: { text: "ragazza", pronunciation: "rah-gat-sah" } },
-            pt: { girl: { text: "menina", pronunciation: "meh-nee-nah" } },
-            ru: { girl: { text: "девочка", pronunciation: "dye-voch-ka" } },
-            zh: { girl: { text: "女孩", pronunciation: "nǚhái (noo-hai)" } },
-            ja: { girl: { text: "少女", pronunciation: "shōjo (show-jo)" } }
-        };
+<script>
+// CONFIG
+const LIBRE_DETECT = 'https://libretranslate.com/detect';
+const LIBRE_TRANSLATE = 'https://libretranslate.com/translate';
+const DICTAPI_BASE = 'https://api.dictionaryapi.dev/api/v2/entries'; // /{lang}/{word}
 
-        const translateBtn = document.getElementById('translateBtn');
-        const pronounceBtn = document.getElementById('pronounceBtn');
-        const sourceLang = document.getElementById('sourceLang');
-        const targetLang = document.getElementById('targetLang');
-        const inputText = document.getElementById('inputText');
-        const translatedText = document.getElementById('translatedText');
-        const pronunciationText = document.getElementById('pronunciationText');
+// Expanded local offline dictionary for instant fallback (word -> translations)
+const LOCAL_DICT = {
+  girl: { en:'girl', sw:'msichana', es:'chica', fr:'fille', de:'Mädchen', it:'ragazza', pt:'menina', ru:'девочка', zh:'女孩', ja:'女の子', ar:'فتاة' },
+  boy: { en:'boy', sw:'mvulana', es:'chico', fr:'garçon', de:'Junge', it:'ragazzo', pt:'menino', ru:'мальчик', zh:'男孩', ja:'男の子', ar:'صبي' },
+  hello: { en:'hello', sw:'habari', es:'hola', fr:'bonjour', de:'hallo', it:'ciao', pt:'olá', ru:'привет', zh:'你好', ja:'こんにちは', ar:'مرحبا' },
+  goodbye: { en:'goodbye', sw:'kwaheri', es:'adós', fr:'au revoir', de:'auf Wiedersehen', it:'arrivederci', pt:'adeus', ru:'до свидания', zh:'再见', ja:'さようなら', ar:'مع السلامة' },
+  water: { en:'water', sw:'maji', es:'agua', fr:'eau', de:'Wasser', it:'acqua', pt:'água', ru:'вода', zh:'水', ja:'水', ar:'ماء' },
+  food: { en:'food', sw:'chakula', es:'comida', fr:'nourriture', de:'Essen', it:'cibo', pt:'comida', ru:'еда', zh:'食物', ja:'食ぷ物', ar:'طعام' },
+  love: { en:'love', sw:'upendo', es:'amor', fr:'amour', de:'Liebe', it:'amore', pt:'amor', ru:'любовь', zh:'爱', ja:'愛', ar:'حب' },
+  book: { en:'book', sw:'kitabu', es:'libro', fr:'livre', de:'Buch', it:'libro', pt:'livro', ru:'книга', zh:'书', ja:'本', ar:'كتاب' },
+  car: { en:'car', sw:'gari', es:'coche', fr:'voiture', de:'Auto', it:'auto', pt:'carro', ru:'машина', zh:'车', ja:'車', ar:'سيارة' },
+  mother: { en:'mother', sw:'mama', es:'madre', fr:'mère', de:'Mutter', it:'madre', pt:'mãe', ru:'мать', zh:'母人', ja:'母', ar:'أم' },
+  father: { en:'father', sw:'baba', es:'padre', fr:'père', de:'Vater', it:'padre', pt:'pai', ru:'отец', zh:'父亲', ja:'父', ar:'أب' },
+  cat: { en:'cat', sw:'paka', es:'gato', fr:'chat', de:'Katze', it:'gatto', pt:'gato', ru:'кот', zh:'猫', ja:'猫', ar:'قط' },
+  dog: { en:'dog', sw:'mbwa', es:'perro', fr:'chien', de:'Hund', it:'cane', pt:'cão', ru:'собака', zh:'犬', ja:'犬', ar:'كلب' },
+  school: { en:'school', sw:'shule', es:'escuela', fr:'école', de:'Schule', it:'scuola', pt:'escola', ru:'школа', zh:'学校', ja:'学校', ar:'مدرسة' },
+  please: { en:'please', sw:'tafadhali', es:'por favor', fr:'s\'il vous plaît', de:'bitte', it:'per favore', pt:'por favor', ru:'пожалуйста', zh:'请', ja:'ずお願す', ar:'من فضلك' },
+  thank: { en:'thank you', sw:'asante', es:'gracias', fr:'merci', de:'danke', it:'grazie', pt:'obrigado', ru:'спасибо', zh:'谢谢', ja:'ありがとうございます', ar:'شكرا' }
+};
 
-        async function detectLanguage(text) {
-            // Mock language detection (replace with real API, e.g., Google Cloud Language Detection)
-            if (text.toLowerCase().includes("msichana")) return "sw";
-            if (text.toLowerCase().includes("chica")) return "es";
-            return "en"; // Default to English
-        }
+// Utilities
+const $ = (id) => document.getElementById(id);
+const inputEl = $('input');
+const targetEl = $('target');
+const translatedEl = $('translated');
+const ipaEl = $('ipa');
+const detectedEl = $('detected');
+const statusEl = $('status');
+const translateBtn = $('translate');
+const clearBtn = $('clear');
+const playBtn = $('play');
+const copyBtn = $('copy');
+const ipaCopyBtn = $('ipa-copy');
+const autodetectEl = $('autodetect');
+const autoplayEl = $('autoplay');
 
-        translateBtn.addEventListener('click', async () => {
-            const text = inputText.value.trim().toLowerCase();
-            if (!text) {
-                alert('Please enter some text.');
-                return;
-            }
+let debounceTimer = null;
 
-            let source = sourceLang.value;
-            const target = targetLang.value;
+function setStatus(t, danger=false){ statusEl.textContent = t; statusEl.style.background = danger ? 'rgba(239,68,68,0.12)' : 'rgba(255,255,255,0.02)'; }
 
-            if (source === 'auto') {
-                source = await detectLanguage(text);
-                alert(`Detected source language: ${source}`);
-            }
+async function detectLanguage(text){
+  if(!text || !text.trim()) return null;
+  try{
+    const r = await fetch(LIBRE_DETECT, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({q:text})});
+    const data = await r.json();
+    if(Array.isArray(data) && data[0]) return data[0].language;
+  }catch(e){ console.warn('detect failed',e); }
+  return null;
+}
 
-            try {
-                // Mock translation (replace with real API call)
-                const translationData = mockTranslations[target][text] || {
-                    text: `Translated: ${text} (mock)`,
-                    pronunciation: `Pronounced: ${text} (mock)`
-                };
+async function translateText(text, target){
+  if(!text || !text.trim()) return '';
+  // Use local fallback for single-word exact matches
+  const first = text.trim().toLowerCase().split(/\s+/)[0];
+  if(LOCAL_DICT[first] && LOCAL_DICT[first][target]){
+    return LOCAL_DICT[first][target];
+  }
 
-                translatedText.textContent = translationData.text;
-                pronunciationText.textContent = translationData.pronunciation;
-                pronounceBtn.disabled = false;
-            } catch (error) {
-                console.error(error);
-                alert('Error during translation. Please try again.');
-            }
-        });
+  try{
+    const r = await fetch(LIBRE_TRANSLATE, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({q:text,source:'auto',target:target,format:'text'})});
+    const d = await r.json();
+    if(d && d.translatedText) return d.translatedText;
+  }catch(e){ console.warn('translate failed', e); }
+  return '';
+}
 
-        pronounceBtn.addEventListener('click', () => {
-            const text = translatedText.textContent;
-            const lang = targetLang.value;
+// Try to fetch IPA/phonetics from dictionaryapi.dev. It supports many languages (see https://dictionaryapi.dev/)
+async function fetchIPA(word, lang){
+  if(!word) return null;
+  // dictionaryapi expects language codes like en, es, fr, de, it, ru, ja, ...
 
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = lang;
-                speechSynthesis.speak(utterance);
-            } else {
-                alert('Your browser does not support text-to-speech.');
-            }
-        });
-    </script>
+  // For multi-word strings, attempt to use first word
+  const w = word.trim().split(/\s+/)[0];
+  try{
+    const url = `${DICTAPI_BASE}/${lang}/${encodeURIComponent(w)}`;
+    const r = await fetch(url);
+    if(!r.ok) return null;
+    const d = await r.json();
+    // d is an array; find phonetics entries
+    if(Array.isArray(d) && d[0]){
+      // phonetics may be under d[0].phonetics or d[0].meanings...
+      const phonetics = d[0].phonetics || [];
+      // prefer 'text' fields (IPA strings) and join unique
+      const texts = phonetics.map(p=>p.text).filter(Boolean);
+      if(texts.length) return Array.from(new Set(texts)).join(' / ');
+      // some languages place phonetic in other spots, try to search recursively
+      const recursiveSearch = JSON.stringify(d).match(/\/[a-zA-Z0-9ˈːː()ɪəɛɔæœşğɯ̟̞ʌŋː-]{1,20}\//g);
+      if(recursiveSearch) return recursiveSearch.join(' ');
+    }
+  }catch(e){ console.warn('ipa fetch failed', e); }
+  return null;
+}
+
+function approximatePronunciation(text, lang){
+  if(!text) return '';
+  // Very light transliteration for Arabic (basic) and otherwise human-friendly syllable breaks
+  if(lang === 'ar'){
+    // naive transliteration map for demo
+    const map = { 'ا':'a','ب':'b','ت':'t','ث':'th','ج':'j','ح':'h','خ':'kh','د':'d','ر':'r','ز':'z','س':'s','ش':'sh','ص':'s','ض':'d','ط':'t','ظ':'z','ع':'\'' ,'غ':'gh','ف':'f','ق':'q','ك':'k','ل':'l','م':'m','ن':'n','ه':'h','و':'w','ي':'y' };
+    return Array.from(text).map(ch => map[ch] || ch).join('');
+  }
+  const vowels = 'aeiouyáéíóúàèìòùäëïöüâêîôûAEIOUY';
+  const words = text.replace(/[,.!?;:\"()]/g,' ').split(/\s+/);
+  return words.map(w=>{
+    if(w.length<=3) return w;
+    let out='';
+    for(let i=0;i<w.length;i++){
+      out += w[i];
+      const currV = vowels.includes(w[i]);
+      const nextV = i+1<w.length ? vowels.includes(w[i+1]) : false;
+      const next2V = i+2<w.length ? vowels.includes(w[i+2]) : false;
+      if(currV && !nextV && next2V) out += '-';
+    }
+    return out;
+  }).join(' ');
+}
+
+async function doTranslate({auto=false}={}){
+  const text = inputEl.value.trim();
+  if(!text){ translatedEl.textContent='—'; ipaEl.textContent='—'; detectedEl.textContent='—'; setStatus('Ready'); return; }
+  setStatus('Working...');
+
+  // detect
+  const detected = await detectLanguage(text) || '—';
+  detectedEl.textContent = detected;
+
+  // attempt local fallback translation first
+  const target = targetEl.value;
+  let translated = await translateText(text, target);
+  if(!translated){ translated = '—'; }
+  translatedEl.textContent = translated;
+
+  // IPA lookup: try dictionaryapi for the language of the translated text if single-word, or for English original if translated not single word
+  let ipa = null;
+  // Prefer fetching ipa for translated word if target language supported by dictionaryapi
+  ipa = await fetchIPA(translated, target);
+  // If no IPA, try fetching for source word in English (if original likely english)
+  if(!ipa && detected && (detected.startsWith('en') || text.split(/\s+/).length===1)){
+    ipa = await fetchIPA(text.split(/\s+/)[0], 'en');
+  }
+
+  if(ipa){ ipaEl.textContent = ipa; }
+  else { ipaEl.textContent = approximatePronunciation(translated !== '—' ? translated : text, target); }
+
+  setStatus('Done');
+
+  if(autoplayEl.checked){ playPronunciation(translated !== '—' ? translated : text, target); }
+}
+
+async function playPronunciation(text, lang){
+  if(!text) return;
+  if(!('speechSynthesis' in window)){ alert('Speech synthesis not supported in this browser'); return; }
+  const utter = new SpeechSynthesisUtterance(text);
+  // try to pick a voice matching the language
+  const voices = window.speechSynthesis.getVoices();
+  const match = voices.find(v => v.lang && v.lang.startsWith(lang));
+  if(match) utter.voice = match;
+  utter.lang = lang;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utter);
+}
+
+// EVENTS
+translateBtn.addEventListener('click', ()=>doTranslate());
+clearBtn.addEventListener('click', ()=>{ inputEl.value=''; translatedEl.textContent='—'; ipaEl.textContent='—'; detectedEl.textContent='—'; setStatus('Cleared'); });
+playBtn.addEventListener('click', ()=>{ const t = translatedEl.textContent==='—' ? inputEl.value : translatedEl.textContent; playPronunciation(t, targetEl.value); });
+copyBtn.addEventListener('click', ()=>{ const t = translatedEl.textContent==='—' ? '' : translatedEl.textContent; navigator.clipboard?.writeText(t); setStatus('Copied'); });
+ipaCopyBtn.addEventListener('click', ()=>{ const t = ipaEl.textContent==='—' ? '' : ipaEl.textContent; navigator.clipboard?.writeText(t); setStatus('Copied IPA'); });
+
+// Auto-detect & translate on type (debounced)
+inputEl.addEventListener('input', ()=>{
+  if(autodetectEl.checked){ clearTimeout(debounceTimer); debounceTimer = setTimeout(()=>doTranslate({auto:true}), 600); }
+});
+
+// on load, ensure voices are loaded for TTS
+if(window.speechSynthesis){ window.speechSynthesis.onvoiceschanged = ()=>{}; }
+
+// Initial status
+setStatus('Ready');
+</script>
 </body>
 </html>
