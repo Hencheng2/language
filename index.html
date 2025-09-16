@@ -3,438 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Language Translator & Pronunciation Guide</title>
+    <title>Language Translation and Pronunciation Tool</title>
     <style>
-        :root {
-            --bg-primary: #121212;
-            --bg-secondary: #1e1e1e;
-            --bg-tertiary: #2d2d2d;
-            --text-primary: #e0e0e0;
-            --text-secondary: #a0a0a0;
-            --accent: #7e57c2;
-            --accent-hover: #9575cd;
-            --success: #66bb6a;
-            --error: #ef5350;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
         body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
             padding: 20px;
-        }
-        
-        .container {
             max-width: 800px;
             margin: 0 auto;
-            background-color: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
         }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
         h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            color: var(--text-primary);
+            text-align: center;
+            color: #ffffff;
         }
-        
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
-        
-        .input-section, .output-section {
-            margin-bottom: 25px;
-        }
-        
-        .section-title {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .section-title svg {
-            margin-right: 10px;
-        }
-        
-        textarea {
-            width: 100%;
-            background-color: var(--bg-tertiary);
-            color: var(--text-primary);
-            border: 1px solid #444;
-            border-radius: 8px;
-            padding: 15px;
-            font-size: 1rem;
-            resize: vertical;
-            min-height: 100px;
-            margin-bottom: 15px;
-        }
-        
-        textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-        
-        .language-selectors {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .language-selector {
-            flex: 1;
-            min-width: 200px;
-        }
-        
         label {
             display: block;
-            margin-bottom: 8px;
-            color: var(--text-secondary);
+            margin-top: 10px;
+            color: #bbbbbb;
         }
-        
-        select {
+        select, textarea, button {
             width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            background-color: var(--bg-tertiary);
-            color: var(--text-primary);
-            border: 1px solid #444;
-            font-size: 1rem;
+            padding: 10px;
+            margin-top: 5px;
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            border: 1px solid #333333;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
-        
-        select:focus {
-            outline: none;
-            border-color: var(--accent);
+        textarea {
+            height: 100px;
+            resize: vertical;
         }
-        
-        .buttons {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
         button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+            background-color: #333333;
             cursor: pointer;
-            transition: background-color 0.2s;
+            margin-top: 10px;
         }
-        
-        .translate-btn {
-            background-color: var(--accent);
-            color: white;
-            flex: 2;
+        button:hover {
+            background-color: #444444;
         }
-        
-        .translate-btn:hover {
-            background-color: var(--accent-hover);
+        #output {
+            margin-top: 20px;
         }
-        
-        .detect-btn {
-            background-color: var(--bg-tertiary);
-            color: var(--text-primary);
-            flex: 1;
-        }
-        
-        .detect-btn:hover {
-            background-color: #3d3d3d;
-        }
-        
-        .output-card {
-            background-color: var(--bg-tertiary);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .output-title {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-        }
-        
-        .translation-output {
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-            min-height: 30px;
-        }
-        
-        .pronunciation-output {
-            color: var(--text-secondary);
-            font-style: italic;
-            min-height: 20px;
-        }
-        
-        .language-name {
-            color: var(--accent);
-            font-weight: bold;
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
-        @media (max-width: 600px) {
-            .language-selectors {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .language-selector {
-                min-width: 100%;
-            }
-            
-            .buttons {
-                flex-direction: column;
-            }
+        #translatedText, #pronunciationText {
+            background-color: #1e1e1e;
+            padding: 10px;
+            border: 1px solid #333333;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Language Translator</h1>
-            <p class="subtitle">Translate text and see pronunciation guides</p>
-        </header>
+    <h1>Language Translation and Pronunciation Tool</h1>
+    
+    <label for="sourceLang">Source Language (select 'Auto' for detection):</label>
+    <select id="sourceLang">
+        <option value="auto">Auto Detect</option>
+        <option value="en">English</option>
+        <option value="sw">Kiswahili (Swahili)</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="de">German</option>
+        <option value="it">Italian</option>
+        <option value="pt">Portuguese</option>
+        <option value="ru">Russian</option>
+        <option value="zh">Chinese (Mandarin)</option>
+        <option value="ja">Japanese</option>
+    </select>
+    
+    <label for="targetLang">Target Language:</label>
+    <select id="targetLang">
+        <option value="en">English</option>
+        <option value="sw">Kiswahili (Swahili)</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="de">German</option>
+        <option value="it">Italian</option>
+        <option value="pt">Portuguese</option>
+        <option value="ru">Russian</option>
+        <option value="zh">Chinese (Mandarin)</option>
+        <option value="ja">Japanese</option>
+    </select>
+    
+    <label for="inputText">Input Text:</label>
+    <textarea id="inputText" placeholder="Enter your sentence here..."></textarea>
+    
+    <button id="translateBtn">Translate</button>
+    
+    <div id="output">
+        <label>Translated Text:</label>
+        <div id="translatedText"></div>
         
-        <div class="input-section">
-            <div class="section-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14 2C14 2 9 2 9 7C9 10 11 12 14 12C17 12 19 10 19 7C19 2 14 2 14 2Z" stroke="currentColor" stroke-width="2"/>
-                    <path d="M9 7H19" stroke="currentColor" stroke-width="2"/>
-                    <path d="M9 12L5 22" stroke="currentColor" stroke-width="2"/>
-                    <path d="M19 12L23 22" stroke="currentColor" stroke-width="2"/>
-                </svg>
-                <span>Text to Translate</span>
-            </div>
-            <textarea id="input-text" placeholder="Enter text to translate..."></textarea>
-            
-            <div class="language-selectors">
-                <div class="language-selector">
-                    <label for="source-lang">From Language</label>
-                    <select id="source-lang">
-                        <option value="auto">Auto Detect</option>
-                        <option value="en" selected>English</option>
-                        <option value="sw">Kiswahili</option>
-                        <option value="es">Spanish</option>
-                        <option value="fr">French</option>
-                        <option value="de">German</option>
-                        <option value="it">Italian</option>
-                        <option value="pt">Portuguese</option>
-                        <option value="ru">Russian</option>
-                        <option value="zh">Chinese</option>
-                        <option value="ja">Japanese</option>
-                        <option value="ar">Arabic</option>
-                    </select>
-                </div>
-                
-                <div class="language-selector">
-                    <label for="target-lang">To Language</label>
-                    <select id="target-lang">
-                        <option value="en">English</option>
-                        <option value="sw" selected>Kiswahili</option>
-                        <option value="es">Spanish</option>
-                        <option value="fr">French</option>
-                        <option value="de">German</option>
-                        <option value="it">Italian</option>
-                        <option value="pt">Portuguese</option>
-                        <option value="ru">Russian</option>
-                        <option value="zh">Chinese</option>
-                        <option value="ja">Japanese</option>
-                        <option value="ar">Arabic</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="buttons">
-                <button class="translate-btn" id="translate-btn">Translate</button>
-                <button class="detect-btn" id="detect-btn">Detect Language</button>
-            </div>
+        <label>Pronunciation:</label>
+        <div id="pronunciationText"></div>
+        
+        <div id="pronunciationSection">
+            <button id="pronounceBtn" disabled>Pronounce Translated Text</button>
         </div>
-        
-        <div class="output-section">
-            <div class="section-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8 12H8.01M12 12H12.01M16 12H16.01M21 12C21 16.4183 16.9706 20 12 20C10.4607 20 9.01172 19.6565 7.74467 19.0511L3 20L4.39499 16.28C3.51156 15.0423 3 13.5743 3 12C3 7.58172 7.02944 4 12 4C16.9706 4 21 7.58172 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span>Translation Results</span>
-            </div>
-            
-            <div class="output-card">
-                <div class="output-title">Translation in <span id="target-lang-name" class="language-name">Kiswahili</span>:</div>
-                <div id="translation-output" class="translation-output"></div>
-                
-                <div class="output-title">Pronunciation:</div>
-                <div id="pronunciation-output" class="pronunciation-output"></div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>Language Translator & Pronunciation Tool © 2023</p>
-        </footer>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const inputText = document.getElementById('input-text');
-            const sourceLang = document.getElementById('source-lang');
-            const targetLang = document.getElementById('target-lang');
-            const translateBtn = document.getElementById('translate-btn');
-            const detectBtn = document.getElementById('detect-btn');
-            const translationOutput = document.getElementById('translation-output');
-            const pronunciationOutput = document.getElementById('pronunciation-output');
-            const targetLangName = document.getElementById('target-lang-name');
-            
-            // Language data with translations and pronunciations
-            const languageData = {
-                en: { name: 'English' },
-                sw: { name: 'Kiswahili' },
-                es: { name: 'Spanish' },
-                fr: { name: 'French' },
-                de: { name: 'German' },
-                it: { name: 'Italian' },
-                pt: { name: 'Portuguese' },
-                ru: { name: 'Russian' },
-                zh: { name: 'Chinese' },
-                ja: { name: 'Japanese' },
-                ar: { name: 'Arabic' }
-            };
-            
-            // Translation dictionary (simplified for demonstration)
-            const translations = {
-                // English to others
-                'en-sw': {
-                    'hello': ['hujambo', 'hoo-JAHM-boh'],
-                    'goodbye': ['kwaheri', 'kwa-HEH-ree'],
-                    'thank you': ['asante', 'ah-SAHN-teh'],
-                    'please': ['tafadhali', 'tah-fah-tha-lee'],
-                    'yes': ['ndio', 'n-dee-oh'],
-                    'no': ['hapana', 'hah-PAH-nah'],
-                    'water': ['maji', 'MAH-jee'],
-                    'food': ['chakula', 'chah-KOO-lah'],
-                    'friend': ['rafiki', 'rah-FEE-kee'],
-                    'family': ['familia', 'fah-MEE-lee-ah'],
-                    'girl': ['msichana', 'm-see-CHAH-nah'],
-                    'boy': ['mvulana', 'm-voo-LAH-nah'],
-                    'woman': ['mwanamke', 'mwah-NAHM-keh'],
-                    'man': ['mwanamume', 'mwah-nah-MOO-meh']
-                },
-                // Kiswahili to others
-                'sw-en': {
-                    'hujambo': ['hello', 'heh-LOH'],
-                    'kwaheri': ['goodbye', 'good-BYE'],
-                    'asante': ['thank you', 'THANK you'],
-                    'tafadhali': ['please', 'PLEEZ'],
-                    'ndio': ['yes', 'YES'],
-                    'hapana': ['no', 'NOH'],
-                    'maji': ['water', 'WAH-ter'],
-                    'chakula': ['food', 'FOOD'],
-                    'rafiki': ['friend', 'FREND'],
-                    'familia': ['family', 'FAM-i-lee'],
-                    'msichana': ['girl', 'GURL'],
-                    'mvulana': ['boy', 'BOY'],
-                    'mwanamke': ['woman', 'WOO-man'],
-                    'mwanamume': ['man', 'MAN']
-                },
-                // Add more language pairs as needed
-                'en-es': {
-                    'hello': ['hola', 'OH-lah'],
-                    'goodbye': ['adiós', 'ah-dee-OHS'],
-                    'thank you': ['gracias', 'GRAH-syahs'],
-                    'girl': ['chica', 'CHEE-kah']
-                },
-                'es-en': {
-                    'hola': ['hello', 'heh-LOH'],
-                    'adiós': ['goodbye', 'good-BYE'],
-                    'gracias': ['thank you', 'THANK you'],
-                    'chica': ['girl', 'GURL']
-                }
-            };
-            
-            // Update target language name when selection changes
-            targetLang.addEventListener('change', function() {
-                targetLangName.textContent = languageData[this.value].name;
-            });
-            
-            // Translate function
-            function translateText() {
-                const text = inputText.value.trim().toLowerCase();
-                const source = sourceLang.value;
-                const target = targetLang.value;
-                
-                if (!text) {
-                    translationOutput.textContent = 'Please enter some text to translate';
-                    pronunciationOutput.textContent = '';
-                    return;
-                }
-                
-                // For auto detection, we would normally use an API
-                // For this demo, we'll assume English if auto is selected
-                const actualSource = source === 'auto' ? 'en' : source;
-                const translationKey = `${actualSource}-${target}`;
-                
-                if (translations[translationKey] && translations[translationKey][text]) {
-                    const [translated, pronunciation] = translations[translationKey][text];
-                    translationOutput.textContent = translated;
-                    pronunciationOutput.textContent = pronunciation;
-                } else {
-                    translationOutput.textContent = 'Translation not available for this word/phrase';
-                    pronunciationOutput.textContent = '';
-                }
+        // Mock translation and pronunciation data (replace with real API in production)
+        const mockTranslations = {
+            en: { girl: { text: "girl", pronunciation: "gurl" } },
+            sw: { girl: { text: "msichana", pronunciation: "m-see-chah-nah" } },
+            es: { girl: { text: "chica", pronunciation: "chee-kah" } },
+            fr: { girl: { text: "fille", pronunciation: "fee-yuh" } },
+            de: { girl: { text: "Mädchen", pronunciation: "maid-chen" } },
+            it: { girl: { text: "ragazza", pronunciation: "rah-gat-sah" } },
+            pt: { girl: { text: "menina", pronunciation: "meh-nee-nah" } },
+            ru: { girl: { text: "девочка", pronunciation: "dye-voch-ka" } },
+            zh: { girl: { text: "女孩", pronunciation: "nǚhái (noo-hai)" } },
+            ja: { girl: { text: "少女", pronunciation: "shōjo (show-jo)" } }
+        };
+
+        const translateBtn = document.getElementById('translateBtn');
+        const pronounceBtn = document.getElementById('pronounceBtn');
+        const sourceLang = document.getElementById('sourceLang');
+        const targetLang = document.getElementById('targetLang');
+        const inputText = document.getElementById('inputText');
+        const translatedText = document.getElementById('translatedText');
+        const pronunciationText = document.getElementById('pronunciationText');
+
+        async function detectLanguage(text) {
+            // Mock language detection (replace with real API, e.g., Google Cloud Language Detection)
+            if (text.toLowerCase().includes("msichana")) return "sw";
+            if (text.toLowerCase().includes("chica")) return "es";
+            return "en"; // Default to English
+        }
+
+        translateBtn.addEventListener('click', async () => {
+            const text = inputText.value.trim().toLowerCase();
+            if (!text) {
+                alert('Please enter some text.');
+                return;
             }
-            
-            // Detect language function (simplified for demo)
-            function detectLanguage() {
-                const text = inputText.value.trim().toLowerCase();
-                
-                if (!text) {
-                    alert('Please enter some text to detect language');
-                    return;
-                }
-                
-                // Simple detection based on known words
-                let detectedLang = 'en'; // default to English
-                
-                // Check if text exists in any language's dictionary
-                for (const langPair in translations) {
-                    const [source] = langPair.split('-');
-                    if (translations[langPair][text]) {
-                        detectedLang = source;
-                        break;
-                    }
-                }
-                
-                // Set the detected language
-                sourceLang.value = detectedLang;
-                alert(`Detected language: ${languageData[detectedLang].name}`);
+
+            let source = sourceLang.value;
+            const target = targetLang.value;
+
+            if (source === 'auto') {
+                source = await detectLanguage(text);
+                alert(`Detected source language: ${source}`);
             }
-            
-            // Event listeners
-            translateBtn.addEventListener('click', translateText);
-            detectBtn.addEventListener('click', detectLanguage);
-            
-            // Initialize
-            targetLangName.textContent = languageData[targetLang.value].name;
+
+            try {
+                // Mock translation (replace with real API call)
+                const translationData = mockTranslations[target][text] || {
+                    text: `Translated: ${text} (mock)`,
+                    pronunciation: `Pronounced: ${text} (mock)`
+                };
+
+                translatedText.textContent = translationData.text;
+                pronunciationText.textContent = translationData.pronunciation;
+                pronounceBtn.disabled = false;
+            } catch (error) {
+                console.error(error);
+                alert('Error during translation. Please try again.');
+            }
+        });
+
+        pronounceBtn.addEventListener('click', () => {
+            const text = translatedText.textContent;
+            const lang = targetLang.value;
+
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = lang;
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('Your browser does not support text-to-speech.');
+            }
         });
     </script>
 </body>
